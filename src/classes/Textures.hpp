@@ -5,12 +5,12 @@
 
 struct Textures
 {
-	mlx_texture_t	*north;
-	mlx_texture_t	*east;
-	mlx_texture_t	*south;
-	mlx_texture_t	*west;
-	uint32_t		floor;
-	uint32_t		ceiling;
+	mlx_texture_t	*north = nullptr;
+	mlx_texture_t	*east = nullptr;
+	mlx_texture_t	*south = nullptr;
+	mlx_texture_t	*west = nullptr;
+	uint32_t		floor = 0x00000000;
+	uint32_t		ceiling = 0x00000000;
 };
 
 #endif

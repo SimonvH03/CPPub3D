@@ -4,11 +4,11 @@ Window::Window()
 {
 	std::cout << "Window Default Constructor\n";
 }
-																																																																																																																																																																																																																																																																																																																																																																																												
+
 Window::~Window()
 {
 	std::cout << "Window Destructor\n";
-	_allocatedTextures.clear();
+	mlx_terminate(_mlx);
 }
 
 bool	Window::init()
@@ -88,9 +88,9 @@ Window::Texture Window::loadTexture(std::string_view const &filePath)
 	return (texture);
 }
 
-void	Window::addToTextureList(Texture texture)
+void	Window::deleteTexture(Texture texture)
 {
-	_allocatedTextures.insert(_allocatedTextures.begin(), texture);
+	mlx_delete_texture(texture);
 }
 
 Window::Image	Window::newImage() const

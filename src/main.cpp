@@ -18,23 +18,27 @@ void
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	Window	window;
-	Game	game(window);
+	if (argc != 2) return (std::cout << "Usage: " << argv[0] << " <filepath/level.cub>\n", EINVAL);
 
-	if (!window.init())
-		return (print_error(), false);
-	if (!game.loadLevel("subject.cub"))
-		return (print_error(), false);
-	// mlx_key_hook(window->mlx, window_keyhook, window);
-	// mlx_loop_hook(window->mlx, frametime_dependant_variables, window);
-	// mlx_loop_hook(window->mlx, view_manager, window);
-	// mlx_mouse_hook(window->mlx, mouse_buttons, window);
-	window.key_hook(window_keyhook, NULL);
-	if (!window.loop())
-		return (false);
+	{
+		Window	window;
+		Game	game(window);
+
+		if (!window.init())
+			return (print_error(), false);
+		if (!game.loadLevel(argv[1]))
+			return (print_error(), false);
+		// mlx_key_hook(window->mlx, window_keyhook, window);
+		// mlx_loop_hook(window->mlx, frametime_dependant_variables, window);
+		// mlx_loop_hook(window->mlx, view_manager, window);
+		// mlx_mouse_hook(window->mlx, mouse_buttons, window);
+		window.key_hook(window_keyhook, NULL);
+		if (!window.loop())
+			return (false);
+	}
 	if (g_cubErrno != cub::err::Success || mlx_errno != MLX_SUCCESS)
 		print_error();
-	return (0);
+	return (g_cubErrno != cub::err::Success || mlx_errno != MLX_SUCCESS);
 }

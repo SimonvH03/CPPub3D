@@ -1,7 +1,7 @@
 MAKEFLAGS	=	-r -R
 
 CXX			=	c++
-CXXFLAGS	=	-std=c++20 -MMD -MP
+CXXFLAGS	=	-std=c++20 -MMD -MP -g
 CXXFLAGS	+=	-Wall -Werror -Wextra -Wshadow
 
 NAME		=	CPPub3d

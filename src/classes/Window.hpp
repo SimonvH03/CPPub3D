@@ -32,18 +32,16 @@ class Window
 		bool	scroll_hook(mlx_scrollfunc function, void *param);
 		bool	loop();
 
-		void				addToTextureList(Texture texture);
-
 		const Settings&		getSettings() const;
 		Handle				getMlx() const;
 
 		static Texture		loadTexture(std::string_view const &filePath);
+		static void			deleteTexture(Texture texture);
 		Image				newImage() const;
 
 	private:
 		Handle					_mlx;
 		mlx_win_cursor_t		*_cursor;
-		std::vector<Texture>	_allocatedTextures;
 
 		enum class View {Menu, Game}	_view;
 		Settings						_settings;

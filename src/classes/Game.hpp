@@ -23,11 +23,14 @@ class Game
 		bool	loadLevel(const std::string& inputFile);
 
 	private:
+		void	addToTextureList(Window::Texture texture);
+
 		Window		&_window;
-		// Renderer	*_renderer = nullptr;
 		Scene		*_scene = nullptr;
+		// Renderer	*_renderer = nullptr;
 		// Hud			*_hud = nullptr;
 
+		std::vector<Window::Texture>	_allocatedTextures;
 		// bool		parseMap(std::vector<std::string>::const_iterator &iterator, std::vector<std::string>::const_iterator end);
 };
 
