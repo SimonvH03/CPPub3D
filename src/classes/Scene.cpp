@@ -1,6 +1,6 @@
 #include "Scene.hpp"
 
-Scene::Scene(Window &window, ParsingData &&levelData)
+Scene::Scene(Window &window, Parser::Data &&levelData)
 	: _window(window),
 	_textures(std::move(levelData.textures)),
 	_grid(std::move(levelData.grid)),

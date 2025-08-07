@@ -14,16 +14,16 @@
 # include "Grid.hpp"
 # include "Camera.hpp"
 
-struct	ParsingData
-{
-	Textures	textures;
-	Grid		grid;
-	Camera		camera;
-};
-
 namespace Parser
 {
-	bool	level(ParsingData &output, std::string const &filePath);
+	struct	Data
+	{
+		Textures	textures;
+		Grid		grid;
+		Camera		camera;
+	};
+
+	bool	level(Data &output, std::string const &filePath);
 };
 
 #endif

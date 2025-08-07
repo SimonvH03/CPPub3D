@@ -186,7 +186,7 @@ namespace
 	}
 }
 
-bool Parser::level(ParsingData &levelData, std::string const &inputFile)
+bool Parser::level(Data &levelData, std::string const &inputFile)
 {
 	std::vector<std::string>	content;
 

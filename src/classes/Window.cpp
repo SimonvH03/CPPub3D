@@ -22,8 +22,7 @@ bool	Window::init()
 	mlx_set_setting(MLX_DECORATED, !_settings.fullscreen);
 	mlx_set_setting(MLX_HEADLESS, false);
 	_mlx = mlx_init(_settings.width, _settings.height, config::WindowTitle, false);
-	if (_mlx == NULL)
-		return (set_error(cub::err::MemFail));
+	if (_mlx == nullptr) return (set_error(cub::err::MlxFail));
 	if (_settings.fullscreen == true)
 	{
 		mlx_get_monitor_size(_settings.monitorId, &width, &height);
@@ -31,40 +30,19 @@ bool	Window::init()
 	}
 	mlx_set_mouse_pos(_mlx, _mlx->width / 2, _mlx->height / 2);
 	_cursor = mlx_create_std_cursor(MLX_CURSOR_ARROW);
+	if (_cursor == nullptr) return (set_error(cub::err::MlxFail));
 	mlx_set_cursor(_mlx, _cursor);
+	mlx_key_hook(_mlx, keyHookCallback, this);
+	mlx_loop_hook(_mlx, loopHookCallback, this);
 	return (true);
 }
 
-
-
-bool	Window::loop_hook(void (*function)(void *), void *param) const
-{
-	if (!mlx_loop_hook(_mlx, function, (param) ? param : _mlx))
-		return (set_error(cub::err::MlxFail));
-	return (true);
-}
-
-void	Window::key_hook(mlx_keyfunc function, void *param) const
-{
-	mlx_key_hook(_mlx, function, (param) ? param : _mlx);
-}
-
-void	Window::mouse_hook(mlx_mousefunc function, void *param) const
-{
-	mlx_mouse_hook(_mlx, function, (param) ? param : _mlx);
-}
-
-void	Window::scroll_hook(mlx_scrollfunc function, void *param) const
-{
-	mlx_scroll_hook(_mlx, function, (param) ? param : _mlx);
-}
-
-void	Window::loop() const
+void	Window::loop()
 {
 	mlx_loop(_mlx);
 }
 
-void	Window::close() const
+void	Window::close()
 {
 	mlx_close_window(_mlx);
 }
@@ -107,10 +85,39 @@ Window::Image	Window::newImage() const
 	return (image);
 }
 
-// Window::Handle	Window::getMlx() const
-// {
-// 	return (_mlx);
-// }
+void	Window::addKeyHook(KeyHook function)
+{
+	_keyHooks.push_back(function);
+}
+
+void	Window::callKeyHooks(KeyData keyData)
+{
+	if (keyData.key == MLX_KEY_ESCAPE && keyData.action == MLX_PRESS)
+		return close();
+	for (KeyHook function : _keyHooks)
+		function(keyData);
+}
+
+void	Window::keyHookCallback(mlx_key_data_t keyData, void *self)
+{
+	((Window *)self)->callKeyHooks(KeyData{keyData.key, keyData.action, keyData.modifier});
+}
+
+void	Window::addLoopHook(LoopHook function)
+{
+	_loopHooks.push_back(std::move(function));
+}
+
+void	Window::callLoopHooks()
+{
+	for (LoopHook &function : _loopHooks)
+		function();
+}
+
+void	Window::loopHookCallback(void *self)
+{
+	((Window *)self)->callLoopHooks();
+}
 
 const Window::Settings	&Window::getSettings() const
 {

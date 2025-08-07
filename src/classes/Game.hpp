@@ -18,16 +18,23 @@ class Game
 	public:
 		enum class View
 		{
-			Menu,
-			Settings,
-			Level
+			MainMenu,
+			// Settings,
+			// LevelSelection,
+			Play,
+			// Pause,
 		};
 
-		explicit Game(Window &window);
+		Game(Window &window);
 		~Game();
 
 		bool	run();
 		bool	loadLevel(const std::string& inputFile);
+
+		void	keyHook(Window::KeyData keyData);
+		void	update();
+		void	updateMainMenu();
+		void	updatePlay();
 
 		Window const	&getWindow() const;
 		Scene const		&getScene() const;
@@ -38,7 +45,7 @@ class Game
 		Scene		*_scene = nullptr;
 		// Renderer	*_renderer = nullptr;
 		// Hud			*_hud = nullptr;
-		View		_view;
+		View		_view = View::Play;
 
 		std::vector<Window::Texture>	_allocatedTextures;
 		void	addToTextureList(std::initializer_list<Window::Texture> textures);
