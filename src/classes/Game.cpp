@@ -1,7 +1,8 @@
 #include "Game.hpp"
 #include "loop_hooks.cpp"
 
-Game::Game(Window &window) : _window(window)
+Game::Game(Window &window)
+	:	_window(window)
 {
 	std::cout << "Game Default Constructor\n";
 }
