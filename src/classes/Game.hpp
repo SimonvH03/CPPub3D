@@ -32,13 +32,12 @@ class Game
 		bool	loadLevel(const std::string& inputFile);
 
 		void	keyHook(Window::KeyData keyData);
+		void	sync();
 		void	update();
-		void	updateMainMenu();
-		void	updatePlay();
 
-		Window const	&getWindow() const;
-		Scene const		&getScene() const;
-		View			getView() const;
+		// Window const	&getWindow() const;
+		// Scene const		&getScene() const;
+		// View			getView() const;
 
 	private:
 		Window		&_window;
@@ -50,6 +49,9 @@ class Game
 		std::vector<Window::Texture>	_allocatedTextures;
 		void	addToTextureList(std::initializer_list<Window::Texture> textures);
 		void	clearTextureList();
+
+		void	updateMainMenu();
+		void	updatePlay();
 };
 
 #endif

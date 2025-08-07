@@ -88,7 +88,7 @@ int	Grid::iterate(iterateFunc function, void *param)
 		for (x = 0; x < _width; x++)
 		{
 			return_value = function(getCell(y, x), y, x, param);
-			if (return_value) return return_value;
+			if (return_value) return (return_value);
 		}
 	}
 	return (0);

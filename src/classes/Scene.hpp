@@ -16,16 +16,17 @@
 class Scene
 {
 	public:
-		Scene(Window &window, Parser::Data &&levelData);
+		Scene();
+		Scene(Parser::Data &&levelData);
+		Scene &operator=(Scene &&original);
 		~Scene();
 
-		Grid const		&getGrid() const;
+		// Grid const		&getGrid() const;
 		// Textures const	&getTextures() const;
 
 		void	update();
 
 	private:
-		Window 		&_window;
 		Textures	_textures;
 		Grid		_grid;
 		Player		_player;

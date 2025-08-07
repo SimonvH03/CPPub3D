@@ -16,9 +16,8 @@ Game::~Game()
 bool	Game::run()
 {
 	_window.addKeyHook([this](Window::KeyData keyData) {this->keyHook(keyData);});
+	_window.addLoopHook([this]() {this->sync();});
 	_window.addLoopHook([this]() {this->update();});
-	// mlx_loop_hook(window->mlx, frametime_dependant_variables, window);
-	// mlx_loop_hook(window->mlx, view_manager, window);
 	// mlx_mouse_hook(window->mlx, mouse_buttons, window);
 	_window.loop();
 	return (true);
@@ -50,6 +49,11 @@ void	Game::keyHook(Window::KeyData keyData)
 	// {
 	// 	reload_weapon(&window->player.weapon);
 	// }
+}
+
+void	Game::sync()
+{
+	// call everything to update frametime dependant variables
 }
 
 void	Game::update()
@@ -89,7 +93,7 @@ bool Game::loadLevel(const std::string& inputFile)
 				levelData.textures.east,
 				levelData.textures.south,
 				levelData.textures.west});
-		_scene = new Scene(_window, std::move(levelData));
+		_scene = new Scene(std::move(levelData));
 	}
 	// next steps should be elsewhere
 	// if  (!_renderer.init(window)) return (false);
@@ -109,17 +113,17 @@ void	Game::clearTextureList()
 		Window::deleteTexture(texture);
 }
 
-Window const	&Game::getWindow() const
-{
-	return (_window);
-}
+// Window const	&Game::getWindow() const
+// {
+// 	return (_window);
+// }
 
-Scene const	&Game::getScene() const
-{
-	return (*_scene);
-}
+// Scene const	&Game::getScene() const
+// {
+// 	return (*_scene);
+// }
 
-Game::View	Game::getView() const
-{
-	return (_view);
-}
+// Game::View	Game::getView() const
+// {
+// 	return (_view);
+// }

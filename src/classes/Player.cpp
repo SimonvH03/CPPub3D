@@ -16,6 +16,15 @@ Player::Player(Camera &&camera) noexcept
 {
 	std::cout << "Player Camera Move Constructor\n";
 }
+Player &Player::operator=(Player &&original)
+{
+	std::cout << "Player Move Assignment Operator\n";
+	if (this != &original)
+	{
+		_camera = std::move(original._camera);
+	}
+	return (*this);
+}
 
 Player::~Player()
 {

@@ -11,6 +11,7 @@ class Player
 		Player();
 		Player(Camera const &camera);
 		Player(Camera &&camera) noexcept;
+		Player &operator=(Player &&original);
 		~Player();
 
 		Camera const	&getCamera();
