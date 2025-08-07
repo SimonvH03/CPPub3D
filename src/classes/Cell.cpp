@@ -1,21 +1,25 @@
 #include "Cell.hpp"
 
-Cell::Cell() : _type(0), _solid(0), _id(0)
+Cell::Cell()
 {
+	// std::cout << "Cell Default Constructor\n";
 }
 
 Cell::Cell(Cell const &original)
 {
+	// std::cout << "Cell Copy Constructor\n";
 	*this = original;
 }
 
 Cell::Cell(char token)
 {
+	// std::cout << "Cell Token Constructor\n";
 	*this = token;
 }
 
 Cell &Cell::operator=(Cell const &original)
 {
+	// std::cout << "Cell Assignment Operator\n";
 	if (this != &original)
 	{
 		_type = original._type;
@@ -27,6 +31,7 @@ Cell &Cell::operator=(Cell const &original)
 
 Cell &Cell::operator=(char token)
 {
+	// std::cout << "Cell Token Assignment Operator\n";
 	if (std::isdigit(token))
 	{
 		_type =	token;
@@ -44,6 +49,7 @@ Cell &Cell::operator=(char token)
 
 Cell::~Cell()
 {
+	// std::cout << "Cell Destructor";
 }
 
 char	Cell::getType() const

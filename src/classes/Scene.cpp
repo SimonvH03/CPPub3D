@@ -1,6 +1,10 @@
 #include "Scene.hpp"
 
-Scene::Scene(Window &window, ParsingData const &levelData) : _window(window), _textures(levelData.textures), _grid(levelData.grid), _player(levelData.camera)
+Scene::Scene(Window &window, ParsingData &&levelData)
+	: _window(window),
+	_textures(std::move(levelData.textures)),
+	_grid(std::move(levelData.grid)),
+	_player(std::move(levelData.camera))
 {
 	std::cout << "Scene Default Constructor\n";
 }

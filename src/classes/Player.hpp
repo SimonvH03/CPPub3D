@@ -10,6 +10,7 @@ class Player
 	public:
 		Player();
 		Player(Camera const &camera);
+		Player(Camera &&camera) noexcept;
 		~Player();
 
 		Camera const	&getCamera();

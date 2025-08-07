@@ -16,7 +16,7 @@
 class Scene
 {
 	public:
-		Scene(Window &window, ParsingData const &levelData);
+		Scene(Window &window, ParsingData &&levelData);
 		~Scene();
 
 		Grid const		&getGrid() const;

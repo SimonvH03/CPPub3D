@@ -14,6 +14,7 @@ class Window
 		typedef	mlx_texture_t	*Texture;
 		typedef	mlx_t 			*Handle;
 		typedef	mlx_image_t		*Image;
+
 		struct	Settings
 		{
 			bool		fullscreen = config::Fullscreen;
@@ -26,14 +27,15 @@ class Window
 		~Window();
 
 		bool	init();
-		bool	loop_hook(void (*function)(void *), void *param);
-		bool	key_hook(mlx_keyfunc function, void *param);
-		bool	mouse_hook(mlx_mousefunc function, void *param);
-		bool	scroll_hook(mlx_scrollfunc function, void *param);
-		bool	loop();
+		bool	loop_hook(void (*function)(void *), void *param) const;
+		void	key_hook(mlx_keyfunc function, void *param) const;
+		void	mouse_hook(mlx_mousefunc function, void *param) const;
+		void	scroll_hook(mlx_scrollfunc function, void *param) const;
+		void	loop() const;
+		void	close() const;
 
 		const Settings&		getSettings() const;
-		Handle				getMlx() const;
+		// Handle				getMlx() const;
 
 		static Texture		loadTexture(std::string_view const &filePath);
 		static void			deleteTexture(Texture texture);
@@ -42,9 +44,7 @@ class Window
 	private:
 		Handle					_mlx;
 		mlx_win_cursor_t		*_cursor;
-
-		enum class View {Menu, Game}	_view;
-		Settings						_settings;
+		Settings				_settings;
 };
 
 #endif

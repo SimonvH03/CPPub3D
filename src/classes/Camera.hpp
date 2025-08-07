@@ -12,11 +12,11 @@ class Camera
 		Vec2	_pos;
 		Vec2	_dir;
 		Vec2	_plane;
-		int32_t	_height_offset;
+		int32_t	_height_offset = 0;
 
-		float	_aspect_ratio;
-		float	_cursor_rot_speed;
-		float	_movement_speed;
+		float	_aspect_ratio = 0;
+		float	_cursor_rot_speed = 0;
+		float	_movement_speed = 0;
 		float	_movement_matrix[3][3];
 		float	_rotation_cosin[2];
 
@@ -24,6 +24,10 @@ class Camera
 		Camera();
 		Camera(Vec2 position, char cardinalDirection);
 		Camera(Vec2 position, Vec2 direction);
+		Camera(Camera const &original);
+		Camera(Camera &&original) noexcept;
+		Camera &operator=(Camera const &original);
+		Camera &operator=(Camera &&original) noexcept;
 		~Camera();
 
 		void	update();

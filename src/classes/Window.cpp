@@ -37,34 +37,36 @@ bool	Window::init()
 
 
 
-bool	Window::loop_hook(void (*function)(void *), void *param)
+bool	Window::loop_hook(void (*function)(void *), void *param) const
 {
-	mlx_loop_hook(_mlx, function, (param) ? param : _mlx);
+	if (!mlx_loop_hook(_mlx, function, (param) ? param : _mlx))
+		return (set_error(cub::err::MlxFail));
 	return (true);
 }
 
-bool	Window::key_hook(mlx_keyfunc function, void *param)
+void	Window::key_hook(mlx_keyfunc function, void *param) const
 {
 	mlx_key_hook(_mlx, function, (param) ? param : _mlx);
-	return (true);
 }
 
-bool	Window::mouse_hook(mlx_mousefunc function, void *param)
+void	Window::mouse_hook(mlx_mousefunc function, void *param) const
 {
 	mlx_mouse_hook(_mlx, function, (param) ? param : _mlx);
-	return (true);
 }
 
-bool	Window::scroll_hook(mlx_scrollfunc function, void *param)
+void	Window::scroll_hook(mlx_scrollfunc function, void *param) const
 {
 	mlx_scroll_hook(_mlx, function, (param) ? param : _mlx);
-	return (true);
 }
 
-bool	Window::loop()
+void	Window::loop() const
 {
 	mlx_loop(_mlx);
-	return(true);
+}
+
+void	Window::close() const
+{
+	mlx_close_window(_mlx);
 }
 
 Window::Texture Window::loadTexture(std::string_view const &filePath)
@@ -105,10 +107,10 @@ Window::Image	Window::newImage() const
 	return (image);
 }
 
-Window::Handle Window::getMlx() const
-{
-	return (_mlx);
-}
+// Window::Handle	Window::getMlx() const
+// {
+// 	return (_mlx);
+// }
 
 const Window::Settings	&Window::getSettings() const
 {

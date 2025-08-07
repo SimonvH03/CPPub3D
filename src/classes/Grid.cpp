@@ -5,16 +5,30 @@ Grid::Grid()
 	std::cout << "Grid Default Constructor\n";
 }
 
-Grid::Grid(size_t width, size_t height) : _width(width), _height(height)
+Grid::Grid(size_t width, size_t height)
+	:	_width(width),
+		_height(height)
 {
 	std::cout << "Grid Dimensions Constructor\n";
 	_data.resize(width * height);
 }
 
 Grid::Grid(Grid const &original)
+    :	_data(original._data),
+		_width(original._width),
+		_height(original._height)
 {
 	std::cout << "Grid Copy Constructor\n";
-	*this = original;
+}
+
+Grid::Grid(Grid&& other) noexcept
+    :	_data(std::move(other._data)),
+		_width(other._width),
+		_height(other._height)
+{
+    std::cout << "Grid Move Constructor\n";
+    other._width = 0;
+    other._height = 0;
 }
 
 Grid	&Grid::operator=(Grid const &original)
@@ -22,11 +36,25 @@ Grid	&Grid::operator=(Grid const &original)
 	std::cout << "Grid Assignment Operator\n";
 	if (this != &original)
 	{
+		_data = original._data;
 		_width = original._width;
 		_height = original._height;
-		_data = original._data;
 	}
 	return (*this);
+}
+
+Grid& Grid::operator=(Grid&& other) noexcept
+{
+    std::cout << "Grid Move Assignment Operator\n";
+    if (this != &other)
+	{
+        _data = std::move(other._data);
+        _width = other._width;
+        _height = other._height;
+        other._width = 0;
+        other._height = 0;
+    }
+    return *this;
 }
 
 Grid::~Grid()

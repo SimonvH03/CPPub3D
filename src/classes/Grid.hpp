@@ -14,7 +14,9 @@ class Grid
 		Grid();
 		Grid(size_t width, size_t height);
 		Grid(Grid const &original);
+		Grid(Grid &&original) noexcept;
 		Grid &operator=(Grid const &original);
+		Grid &operator=(Grid &&other) noexcept;
 		~Grid();
 
 		typedef	int		(*iterateFunc)(Cell, size_t, size_t, void *);
@@ -29,8 +31,8 @@ class Grid
 
 	private:
 		std::vector<Cell>	_data;
-		size_t				_width;
-		size_t				_height;
+		size_t				_width = 0;
+		size_t				_height = 0;
 
 		Cell		&cell(size_t y, size_t x);
 };

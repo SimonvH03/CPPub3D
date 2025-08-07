@@ -157,7 +157,7 @@ namespace
 	bool	parseMap(Camera &camera, Grid &grid)
 	{
 		Vec2	playerPosition;
-		char	playerDirection;
+		char	playerCardinal;
 		bool	playerFound(false);
 
 		for (size_t y = 0; y < grid.getHeight(); ++y)
@@ -172,7 +172,7 @@ namespace
 					grid.setCell(y, x, '0');
 					playerPosition.x = x;
 					playerPosition.y = y;
-					playerDirection = token;
+					playerCardinal = token;
 				}
 			}
 		}
@@ -181,7 +181,7 @@ namespace
 		std::vector<std::vector<bool>> visited(grid.getHeight(), std::vector<bool>(grid.getWidth(), false));
 		if (!floodFill(grid, visited, playerPosition.y, playerPosition.x)) return (set_error(cub::err::Perimeter));
 	
-		camera = Camera(playerPosition, playerDirection);
+		camera = std::move(Camera(playerPosition, playerCardinal));
 		return (true);
 	}
 }

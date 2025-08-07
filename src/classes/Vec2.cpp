@@ -1,14 +1,17 @@
 #include "Vec2.hpp"
 
-Vec2::Vec2() : x(0), y(0)
+Vec2::Vec2()
 {}
 
-Vec2::Vec2(float _x, float _y) : x(_x), y(_y)
+Vec2::Vec2(float _x, float _y)
+	:	x(_x),
+		y(_y)
 {}
 
 Vec2::Vec2(const Vec2 &original)
+	:	x(original.x),
+		y(original.y)
 {
-	*this = original;
 }
 
 Vec2::~Vec2()

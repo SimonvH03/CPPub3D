@@ -16,22 +16,33 @@
 class Game
 {
 	public:
+		enum class View
+		{
+			Menu,
+			Settings,
+			Level
+		};
+
 		explicit Game(Window &window);
 		~Game();
 
 		bool	run();
 		bool	loadLevel(const std::string& inputFile);
 
-	private:
-		void	addToTextureList(Window::Texture texture);
+		Window const	&getWindow() const;
+		Scene const		&getScene() const;
+		View			getView() const;
 
+	private:
 		Window		&_window;
 		Scene		*_scene = nullptr;
 		// Renderer	*_renderer = nullptr;
 		// Hud			*_hud = nullptr;
+		View		_view;
 
 		std::vector<Window::Texture>	_allocatedTextures;
-		// bool		parseMap(std::vector<std::string>::const_iterator &iterator, std::vector<std::string>::const_iterator end);
+		void	addToTextureList(std::initializer_list<Window::Texture> textures);
+		void	clearTextureList();
 };
 
 #endif

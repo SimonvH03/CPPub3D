@@ -5,9 +5,9 @@
 class Cell
 {
 	private:
-		char	_type;
-		bool	_solid;
-		int8_t	_id;
+		char	_type = '\0';
+		bool	_solid = false;
+		int8_t	_id = 0x00;
 
 	public:
 		Cell();
