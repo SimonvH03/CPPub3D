@@ -40,6 +40,17 @@ class Window
 			Action		action;
 			Modifier	modifier;
 		};
+		struct PressedKeys
+		{
+			bool	w		= false;
+			bool	a		= false;
+			bool	s		= false;
+			bool	d		= false;
+			bool	up		= false;
+			bool	down	= false;
+			bool	left	= false;
+			bool	right	= false;
+		};
 
 		using LoopHook	= std::function<void ()>;
 		using KeyHook	= std::function<void (KeyData)>;
@@ -55,11 +66,9 @@ class Window
 		};
 
 		void	addKeyHook(KeyHook function);
-		void	callKeyHooks(KeyData keyData);
 static	void	keyHookCallback(mlx_key_data_t keyData, void *self);
 
 		void	addLoopHook(LoopHook function);
-		void	callLoopHooks();
 static	void	loopHookCallback(void *self);
 
 static	Texture	loadTexture(std::string_view const &filePath);
@@ -68,18 +77,25 @@ static	void	deleteTexture(Texture texture);
 		Image	newImage() const;
 		bool	isKeyDown(Key key) const;
 
-		// Settings const	&getSettings() const;
+		Settings const		&getSettings() const;
+		PressedKeys const	&getPressedKeys() const;
+		float				getFrameTime() const;
 		// Handle			getMlx() const;
 
 	private:
 		Handle					_mlx = nullptr;
 		mlx_win_cursor_t		*_cursor = nullptr;
 		Settings				_settings;
+		PressedKeys				_pressedKeys;
 
 		std::vector<LoopHook>	_loopHooks;
 		std::vector<KeyHook>	_keyHooks;
 		// std::vector<mouseHook>	_mouseHooks;
 		// std::vector<scrollHook>	_scrollHooks;
+
+		void	callKeyHooks(KeyData keyData);
+		void	callLoopHooks();
+		void	updatePressedKeys();
 };
 
 #endif

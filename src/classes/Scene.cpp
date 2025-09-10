@@ -1,16 +1,9 @@
 #include "Scene.hpp"
 
-Scene::Scene(PressedKeys const &pressedKeys)
-	:	_pressedKeys(pressedKeys)
-{
-	std::cout << "Scene Default Constructor\n";
-}
-
-Scene::Scene(Parser::Data &&levelData, PressedKeys const &pressedKeys)
+Scene::Scene(Parser::Data &&levelData, Physicer::InputsPlay const &inputs)
 	:	_textures(std::move(levelData.textures)),
 		_grid(std::move(levelData.grid)),
-		_player(std::move(levelData.camera)),
-		_pressedKeys(pressedKeys)
+		_player(std::move(levelData.camera), inputs)
 {
 	std::cout << "Scene Level Constructor\n";
 }
@@ -34,53 +27,10 @@ Scene::~Scene()
 
 void	Scene::update()
 {
-	// inputs
-	// wasd_move();
-	arrowkeys();
-	// mouse_pan();
-	// env updates: doors, entities, animations
+	_player.update();
 	// update_doors();
 	// update_weapon();
 }
-
-void	Scene::arrowkeys()
-{
-	short	lateral = 0;
-	short	longitudinal = 0;
-
-	if (_pressedKeys.left) lateral += 1;
-	if (_pressedKeys.right) lateral -= 1;
-	if (_pressedKeys.up) longitudinal += 1;
-	if (_pressedKeys.down) longitudinal -= 1;
-
-	if (lateral)
-		_player.yawCamera(lateral);
-	if (longitudinal)
-		_player.pitchCamera(longitudinal);
-}
-
-// void
-// 	wasd_move(
-// 		mlx_t *mlx,
-// 		Grid &grid,
-// 		Camera &camera)
-// {
-// 	short	forward_backward;
-// 	short	left_right;
-
-// 	forward_backward = 0;
-// 	left_right = 0;
-// 	if (mlx_is_key_down(mlx, MLX_KEY_W))
-// 		forward_backward += 1;
-// 	if (mlx_is_key_down(mlx, MLX_KEY_S))
-// 		forward_backward -= 1;
-// 	if (mlx_is_key_down(mlx, MLX_KEY_A))
-// 		left_right -= 1;
-// 	if (mlx_is_key_down(mlx, MLX_KEY_D))
-// 		left_right += 1;
-// 	if (forward_backward || left_right)
-// 		move_camera(camera, grid->tilemap, forward_backward, left_right);
-// }
 
 // void	Scene::keyHook(Window::KeyData keyData)
 // {

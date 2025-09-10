@@ -181,7 +181,7 @@ namespace
 		std::vector<std::vector<bool>> visited(grid.getHeight(), std::vector<bool>(grid.getWidth(), false));
 		if (!floodFill(grid, visited, playerPosition.y, playerPosition.x)) return (set_error(cub::err::Perimeter));
 	
-		camera = std::move(Camera(playerPosition, playerCardinal));
+		camera = Camera(playerPosition, playerCardinal);// URVO
 		return (true);
 	}
 }

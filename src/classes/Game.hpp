@@ -9,7 +9,6 @@
 # include "Parser.hpp"
 
 # include "Window.hpp"
-# include "PressedKeys.hpp"
 # include "Scene.hpp"
 # include "Hud.hpp"
 
@@ -41,7 +40,6 @@ class Game
 		Physicer	*_physicer = nullptr;
 		// Hud			*_hud = nullptr;
 		View		_view = View::Play;
-		PressedKeys	_pressedKeys;
 
 		std::vector<Window::Texture>	_allocatedTextures;
 		void	addToTextureList(std::initializer_list<Window::Texture> textures);

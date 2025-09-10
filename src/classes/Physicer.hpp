@@ -6,20 +6,38 @@
 # include "Config.hpp"
 # include "Window.hpp"
 
-# include "Scene.hpp"
-# include "Camera.hpp"
-
 class Physicer
 {
 	public:
-		Physicer(Window const &window, Scene const &scene);
+		Physicer(Window const &window);
 		~Physicer();
+
+		struct	InputsPlay
+		{
+			struct Move
+			{
+				float	lateral;
+				float	longitudinal;
+			}	move;
+			struct Look
+			{
+				float	lateral;
+				float	longitudinal;
+			}	look;
+			InputsPlay &operator*(float const factor);
+		};
 
 		void	update();
 
+		InputsPlay const &getInputsPlay() const;
+
 	private:
 		Window const	&_window;
-		Scene const		&_scene;
+
+		InputsPlay		_inputsPlay;
+
+		void	interpretPressedKeys();
+
 };
 
 #endif

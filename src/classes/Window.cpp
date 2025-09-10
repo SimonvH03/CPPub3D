@@ -90,6 +90,11 @@ bool	Window::isKeyDown(Key key) const
 	return (mlx_is_key_down(_mlx, key));
 }
 
+void	Window::keyHookCallback(mlx_key_data_t keyData, void *self)
+{
+	((Window *)self)->callKeyHooks(KeyData{keyData.key, keyData.action, keyData.modifier});
+}
+
 void	Window::addKeyHook(KeyHook function)
 {
 	_keyHooks.push_back(function);
@@ -103,9 +108,9 @@ void	Window::callKeyHooks(KeyData keyData)
 		function(keyData);
 }
 
-void	Window::keyHookCallback(mlx_key_data_t keyData, void *self)
+void	Window::loopHookCallback(void *self)
 {
-	((Window *)self)->callKeyHooks(KeyData{keyData.key, keyData.action, keyData.modifier});
+	((Window *)self)->callLoopHooks();
 }
 
 void	Window::addLoopHook(LoopHook function)
@@ -115,16 +120,34 @@ void	Window::addLoopHook(LoopHook function)
 
 void	Window::callLoopHooks()
 {
+	updatePressedKeys();
 	for (LoopHook &function : _loopHooks)
 		function();
 }
 
-void	Window::loopHookCallback(void *self)
+void	Window::updatePressedKeys()
 {
-	((Window *)self)->callLoopHooks();
+	_pressedKeys.w		= isKeyDown(Window::Key::MLX_KEY_W);
+	_pressedKeys.a		= isKeyDown(Window::Key::MLX_KEY_A);
+	_pressedKeys.s		= isKeyDown(Window::Key::MLX_KEY_S);
+	_pressedKeys.d		= isKeyDown(Window::Key::MLX_KEY_D);
+	_pressedKeys.up		= isKeyDown(Window::Key::MLX_KEY_UP);
+	_pressedKeys.down	= isKeyDown(Window::Key::MLX_KEY_DOWN);
+	_pressedKeys.left	= isKeyDown(Window::Key::MLX_KEY_LEFT);
+	_pressedKeys.right	= isKeyDown(Window::Key::MLX_KEY_RIGHT);
 }
 
-// const Window::Settings	&Window::getSettings() const
-// {
-// 	return (_settings);
-// }
+const Window::Settings	&Window::getSettings() const
+{
+	return (_settings);
+}
+
+const Window::PressedKeys	&Window::getPressedKeys() const
+{
+	return (_pressedKeys);
+}
+
+float	Window::getFrameTime() const
+{
+	return ((float)_mlx->delta_time);
+}

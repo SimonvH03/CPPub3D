@@ -49,7 +49,7 @@ void	Renderer::initRay()
 
 void	Renderer::castRay()
 {
-	Grid const &grid = _scene.getGrid();
+	Grid const	&grid = _scene.getGrid();
 	while (true)
 	{
 		if (_ray.total.y < _ray.total.x)

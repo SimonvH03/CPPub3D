@@ -10,17 +10,6 @@
 class Camera
 {
 	public:
-		Vec2	_pos;
-		Vec2	_dir;
-		Vec2	_plane;
-		int32_t	_height_offset = 0;
-
-		float	_cursor_rot_speed = 0;
-		float	_movement_speed = 0;
-		float	_movement_matrix[3][3];
-		float	_rotation_cosin[2] = {cosf(0.1), sinf(0.1)}; // temporary testing default initialization
-
-	public:
 		Camera();
 		Camera(Vec2 position, char cardinalDirection);
 		Camera(Vec2 position, Vec2 direction);
@@ -30,9 +19,19 @@ class Camera
 		Camera &operator=(Camera &&original) noexcept;
 		~Camera();
 
-		void	update();
-		void	yaw(short sign);
-		void	pitch(short sign);
+	public:
+		Vec2	_pos;
+		Vec2	_dir;
+		Vec2	_plane;
+		int32_t	_height_offset = 0;
+
+		float	_cursor_rot_speed = 0;
+		float	_movement_speed = 0;
+		float	_movement_matrix[3][3];
+		float	_rotation_cosin[2] = {cosf(1), sinf(1)}; // temporary testing default initialization
+
+		void	yaw(float sign);
+		void	pitch(float sign);
 
 		// Vec2	getPos() const;
 		// Vec2	getDir() const;

@@ -2,25 +2,30 @@
 # define PLAYER_HPP
 # include <iostream>
 
+# include "Physicer.hpp"
+
 # include "Camera.hpp"
 # include "Grid.hpp"
 
 class Player
 {
 	public:
-		Player();
-		Player(Camera const &camera);
-		Player(Camera &&camera) noexcept;
+		Player(Camera const &camera, Physicer::InputsPlay const &inputs);
+		Player(Camera &&camera, Physicer::InputsPlay const &inputs) noexcept;
 		Player &operator=(Player &&original);
 		~Player();
 
-		void	yawCamera(short sign);
-		void	pitchCamera(short sign);
+		void	update();
 
 		Camera const	&getCamera() const;
 
 	private:
 		Camera	_camera;
+
+		Physicer::InputsPlay const	&_inputs;
+
+		void	execInputs();
+
 };
 
 #endif

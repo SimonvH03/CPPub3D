@@ -6,19 +6,18 @@
 # include <fstream>
 
 # include "MLX42.h"
+# include "Physicer.hpp"
 
 # include "Textures.hpp"
 # include "Parser.hpp"
 # include "Window.hpp"
-# include "PressedKeys.hpp"
 # include "Player.hpp"
 # include "Grid.hpp"
 
 class Scene
 {
 	public:
-		Scene(PressedKeys const &pressedKeys);
-		Scene(Parser::Data &&levelData, PressedKeys const &pressedKeys);
+		Scene(Parser::Data &&levelData, Physicer::InputsPlay const &inputs);
 		Scene &operator=(Scene &&original);
 		~Scene();
 
@@ -33,9 +32,6 @@ class Scene
 		Grid		_grid;
 		Player		_player;
 
-		PressedKeys	const &_pressedKeys;
-
-		void	arrowkeys();
 };
 
 #endif

@@ -33,9 +33,9 @@ bool Game::loadLevel(const std::string& inputFile)
 				levelData.textures.east,
 				levelData.textures.south,
 				levelData.textures.west});
-		_scene = new Scene(std::move(levelData), _pressedKeys);
+		_physicer = new Physicer(_window);
+		_scene = new Scene(std::move(levelData), _physicer->getInputsPlay());
 		_renderer = new Renderer(_window, *_scene);
-		_physicer = new Physicer(_window, *_scene);
 	}
 	// next steps should be elsewhere
 	// if  (!_renderer.init(window)) return (false);
@@ -55,7 +55,6 @@ void	Game::keyHook(Window::KeyData keyData)
 
 void	Game::update()
 {
-	_pressedKeys.update(_window);
 	switch (_view)
 	{
 		case View::MainMenu:
@@ -78,6 +77,7 @@ void	Game::updateMainMenu()
 
 void	Game::updatePlay()
 {
+	_physicer->update();
 	_scene->update();
 	// _hud.updatePlay();
 	_renderer->update();

@@ -107,11 +107,13 @@ Camera::~Camera()
 	std::cout << "Camera Destructor\n";
 }
 
-void	Camera::yaw(short sign)
+void	Camera::yaw(float step)// built for -1/1, not variable step size, needs redo
 {
 	Vec2	oldDir = _dir;
-	const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * sign},
-							{-_rotation_cosin[1] * sign, _rotation_cosin[0]}};
+	// const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * sign},
+	// 					{-_rotation_cosin[1] * sign, _rotation_cosin[0]}};
+	const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * step},
+							{-_rotation_cosin[1] * step, _rotation_cosin[0]}};// bs line
 
 	_dir.x = oldDir.x * rm[0][0] + oldDir.y * rm[0][1];
 	_dir.y = oldDir.x * rm[1][0] + oldDir.y * rm[1][1];
@@ -119,10 +121,10 @@ void	Camera::yaw(short sign)
 	_plane = _dir.left();
 }
 
-void	Camera::pitch(short sign)
+void	Camera::pitch(float step)
 {
-	_height_offset -= 0.01 * config::WindowHeight * sign;
-	std::clamp(_height_offset, 0, config::WindowHeight); // this needs to be _window.height
+	_height_offset -= 0.01 * config::WindowHeight * step;
+	std::clamp(_height_offset, 0, config::WindowHeight); // camera shouldn't know window_height
 }
 
 // Vec2	Camera::getPos() const
