@@ -10,18 +10,20 @@
 # include "Textures.hpp"
 # include "Parser.hpp"
 # include "Window.hpp"
+# include "PressedKeys.hpp"
 # include "Player.hpp"
 # include "Grid.hpp"
 
 class Scene
 {
 	public:
-		Scene();
-		Scene(Parser::Data &&levelData);
+		Scene(PressedKeys const &pressedKeys);
+		Scene(Parser::Data &&levelData, PressedKeys const &pressedKeys);
 		Scene &operator=(Scene &&original);
 		~Scene();
 
-		// Grid const		&getGrid() const;
+		Camera const	&getCamera() const;
+		Grid const		&getGrid() const;
 		// Textures const	&getTextures() const;
 
 		void	update();
@@ -30,6 +32,10 @@ class Scene
 		Textures	_textures;
 		Grid		_grid;
 		Player		_player;
+
+		PressedKeys	const &_pressedKeys;
+
+		void	arrowkeys();
 };
 
 #endif

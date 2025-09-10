@@ -12,29 +12,39 @@
 class Window
 {
 	public:
-		typedef	mlx_texture_t	*Texture;
-		typedef	mlx_t 			*Handle;
-		typedef	mlx_image_t		*Image;
+		Window();
+		~Window();
 
-		typedef	mouse_key_t		MouseKey;
-		typedef	keys_t			Key;
-		typedef action_t		Action;
-		typedef modifier_key_t	Modifier;
-		typedef struct {
+		bool	init();
+		void	loop();
+		void	close();
+
+		using Texture	= mlx_texture_t*;
+		using Handle	= mlx_t*;
+		using Image		= mlx_image_t*;
+
+		using MouseKey	= mouse_key_t;
+		using Key		= keys_t;
+		using Action	= action_t;
+		using Modifier	= modifier_key_t;
+
+		struct MouseData
+		{
 			MouseKey	key;
 			Action		action;
 			Modifier	modifier;
-		}						MouseData;
-		typedef struct {
+		};
+		struct KeyData
+		{
 			Key			key;
 			Action		action;
 			Modifier	modifier;
-		}						KeyData;
+		};
 
-		typedef std::function<void ()>			LoopHook;
-		typedef std::function<void (KeyData)>	KeyHook;
-		// typedef std::function<void (mouse_key_t, action_t)>	MouseHook;
-		// typedef std::function<void (double, double)>		ScrollHook;
+		using LoopHook	= std::function<void ()>;
+		using KeyHook	= std::function<void (KeyData)>;
+		// using MouseHook	= std::function<void (mouse_key_t, action_t)>;
+		// using ScrollHook= std::function<void (double, double)>;
 
 		struct	Settings
 		{
@@ -44,13 +54,6 @@ class Window
 			int32_t		height = config::WindowHeight;
 		};
 
-		Window();
-		~Window();
-
-		bool	init();
-		void	loop();
-		void	close();
-
 		void	addKeyHook(KeyHook function);
 		void	callKeyHooks(KeyData keyData);
 static	void	keyHookCallback(mlx_key_data_t keyData, void *self);
@@ -59,12 +62,14 @@ static	void	keyHookCallback(mlx_key_data_t keyData, void *self);
 		void	callLoopHooks();
 static	void	loopHookCallback(void *self);
 
-		const Settings&		getSettings() const;
-		// Handle				getMlx() const;
-
 static	Texture	loadTexture(std::string_view const &filePath);
 static	void	deleteTexture(Texture texture);
+
 		Image	newImage() const;
+		bool	isKeyDown(Key key) const;
+
+		// Settings const	&getSettings() const;
+		// Handle			getMlx() const;
 
 	private:
 		Handle					_mlx = nullptr;

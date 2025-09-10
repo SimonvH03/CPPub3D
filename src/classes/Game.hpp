@@ -9,13 +9,22 @@
 # include "Parser.hpp"
 
 # include "Window.hpp"
-# include "Renderer.hpp"
+# include "PressedKeys.hpp"
 # include "Scene.hpp"
 # include "Hud.hpp"
+
+# include "Renderer.hpp"
+# include "Physicer.hpp"
 
 class Game
 {
 	public:
+		Game(Window &window);
+		~Game();
+
+		bool	run();
+		bool	loadLevel(const std::string& inputFile);
+
 		enum class View
 		{
 			MainMenu,
@@ -25,30 +34,22 @@ class Game
 			// Pause,
 		};
 
-		Game(Window &window);
-		~Game();
-
-		bool	run();
-		bool	loadLevel(const std::string& inputFile);
-
-		void	keyHook(Window::KeyData keyData);
-		void	sync();
-		void	update();
-
-		// Window const	&getWindow() const;
-		// Scene const		&getScene() const;
-		// View			getView() const;
-
 	private:
 		Window		&_window;
 		Scene		*_scene = nullptr;
-		// Renderer	*_renderer = nullptr;
+		Renderer	*_renderer = nullptr;
+		Physicer	*_physicer = nullptr;
 		// Hud			*_hud = nullptr;
 		View		_view = View::Play;
+		PressedKeys	_pressedKeys;
 
 		std::vector<Window::Texture>	_allocatedTextures;
 		void	addToTextureList(std::initializer_list<Window::Texture> textures);
 		void	clearTextureList();
+
+		void	keyHook(Window::KeyData keyData);
+		void	sync();
+		void	update();
 
 		void	updateMainMenu();
 		void	updatePlay();

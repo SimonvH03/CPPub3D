@@ -42,7 +42,6 @@ Camera::Camera(Camera const &original)
 		_dir(original._dir),
 		_plane(original._plane),
 		_height_offset(original._height_offset),
-		_aspect_ratio(original._aspect_ratio),
 		_cursor_rot_speed(original._cursor_rot_speed),
 		_movement_speed(original._movement_speed)
 {
@@ -54,7 +53,6 @@ Camera::Camera(Camera &&original) noexcept
 		_dir(original._dir),
 		_plane(original._plane),
 		_height_offset(original._height_offset),
-		_aspect_ratio(original._aspect_ratio),
 		_cursor_rot_speed(original._cursor_rot_speed),
 		_movement_speed(original._movement_speed)
 {
@@ -63,7 +61,6 @@ Camera::Camera(Camera &&original) noexcept
 	original._dir = Vec2(0,0);
 	original._plane = Vec2(0,0);
 	original._height_offset = 0;
-	original._aspect_ratio = 0;
 	original._cursor_rot_speed = 0;
 	original._movement_speed = 0;
 }
@@ -77,7 +74,6 @@ Camera &Camera::operator=(Camera const &original)
 		_dir = original._dir;
 		_plane = original._plane;
 		_height_offset = original._height_offset;
-		_aspect_ratio = original._aspect_ratio;
 		_cursor_rot_speed = original._cursor_rot_speed;
 		_movement_speed = original._movement_speed;
 	}
@@ -93,7 +89,6 @@ Camera &Camera::operator=(Camera &&original) noexcept
 		_dir = original._dir;
 		_plane = original._plane;
 		_height_offset = original._height_offset;
-		_aspect_ratio = original._aspect_ratio;
 		_cursor_rot_speed = original._cursor_rot_speed;
 		_movement_speed = original._movement_speed;
 
@@ -101,7 +96,6 @@ Camera &Camera::operator=(Camera &&original) noexcept
 		original._dir = Vec2(0,0);
 		original._plane = Vec2(0,0);
 		original._height_offset = 0;
-		original._aspect_ratio = 0;
 		original._cursor_rot_speed = 0;
 		original._movement_speed = 0;
 	}
@@ -113,17 +107,35 @@ Camera::~Camera()
 	std::cout << "Camera Destructor\n";
 }
 
-Vec2	Camera::getPos() const
+void	Camera::yaw(short sign)
 {
-	return (_pos);
+	Vec2	oldDir = _dir;
+	const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * sign},
+							{-_rotation_cosin[1] * sign, _rotation_cosin[0]}};
+
+	_dir.x = oldDir.x * rm[0][0] + oldDir.y * rm[0][1];
+	_dir.y = oldDir.x * rm[1][0] + oldDir.y * rm[1][1];
+	_dir.normalise();
+	_plane = _dir.left();
 }
 
-Vec2	Camera::getDir() const
+void	Camera::pitch(short sign)
 {
-	return (_dir);
+	_height_offset -= 0.01 * config::WindowHeight * sign;
+	std::clamp(_height_offset, 0, config::WindowHeight); // this needs to be _window.height
 }
 
-Vec2	Camera::getPlane() const
-{
-	return (_plane);
-}
+// Vec2	Camera::getPos() const
+// {
+// 	return (_pos);
+// }
+
+// Vec2	Camera::getDir() const
+// {
+// 	return (_dir);
+// }
+
+// Vec2	Camera::getPlane() const
+// {
+// 	return (_plane);
+// }

@@ -1,6 +1,7 @@
 #ifndef CAMERA_HPP
 # define CAMERA_HPP
 # include <iostream>
+# include <algorithm>
 
 # include "Config.hpp"
 
@@ -14,11 +15,10 @@ class Camera
 		Vec2	_plane;
 		int32_t	_height_offset = 0;
 
-		float	_aspect_ratio = 0;
 		float	_cursor_rot_speed = 0;
 		float	_movement_speed = 0;
 		float	_movement_matrix[3][3];
-		float	_rotation_cosin[2];
+		float	_rotation_cosin[2] = {cosf(0.1), sinf(0.1)}; // temporary testing default initialization
 
 	public:
 		Camera();
@@ -31,11 +31,12 @@ class Camera
 		~Camera();
 
 		void	update();
-		void	fitToWindow(size_t width, size_t height);
+		void	yaw(short sign);
+		void	pitch(short sign);
 
-		Vec2	getPos() const;
-		Vec2	getDir() const;
-		Vec2	getPlane() const;
+		// Vec2	getPos() const;
+		// Vec2	getDir() const;
+		// Vec2	getPlane() const;
 };
 
 #endif

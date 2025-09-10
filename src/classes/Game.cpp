@@ -9,6 +9,7 @@ Game::Game(Window &window)
 Game::~Game()
 {
 	std::cout << "Game Destructor\n";
+	delete _renderer;
 	delete _scene;
 	clearTextureList();
 }
@@ -16,10 +17,29 @@ Game::~Game()
 bool	Game::run()
 {
 	_window.addKeyHook([this](Window::KeyData keyData) {this->keyHook(keyData);});
-	_window.addLoopHook([this]() {this->sync();});
 	_window.addLoopHook([this]() {this->update();});
 	// mlx_mouse_hook(window->mlx, mouse_buttons, window);
 	_window.loop();
+	return (true);
+}
+
+bool Game::loadLevel(const std::string& inputFile)
+{
+	delete _scene;
+	{	Parser::Data	levelData;
+
+		if (!Parser::level(levelData, inputFile)) return (false);
+		addToTextureList({levelData.textures.north,
+				levelData.textures.east,
+				levelData.textures.south,
+				levelData.textures.west});
+		_scene = new Scene(std::move(levelData), _pressedKeys);
+		_renderer = new Renderer(_window, *_scene);
+		_physicer = new Physicer(_window, *_scene);
+	}
+	// next steps should be elsewhere
+	// if  (!_renderer.init(window)) return (false);
+	// if (!_hud.init()) return false;
 	return (true);
 }
 
@@ -27,37 +47,15 @@ void	Game::keyHook(Window::KeyData keyData)
 {
 	if (keyData.action != Window::Action::MLX_PRESS)
 		return ;
-	if (keyData.key == Window::Key::MLX_KEY_TAB
-		|| keyData.key == Window::Key::MLX_KEY_M)
-	{
-		std::cout << "Key pressed:\t" << keyData.key << std::endl;
-		// _hud.toggleMaps();
-	}
 	// if (keyData.key == Window::Key::MLX_KEY_LEFT_CONTROL)
 	// {
 	// 	toggle_view(window);
 	// }
-	// if (keyData.key == Window::Key::MLX_KEY_E)
-	// {
-	// 	player_interaction(&window->scene.grid, &window->player.camera);
-	// }
-	// if (keyData.key == Window::Key::MLX_KEY_G)
-	// {
-	// 	fire_weapon(&window->player.weapon);
-	// }
-	// if (keyData.key == Window::Key::MLX_KEY_R)
-	// {
-	// 	reload_weapon(&window->player.weapon);
-	// }
-}
-
-void	Game::sync()
-{
-	// call everything to update frametime dependant variables
 }
 
 void	Game::update()
 {
+	_pressedKeys.update(_window);
 	switch (_view)
 	{
 		case View::MainMenu:
@@ -80,25 +78,9 @@ void	Game::updateMainMenu()
 
 void	Game::updatePlay()
 {
-	// _scene->update();
-}
-
-bool Game::loadLevel(const std::string& inputFile)
-{
-	delete _scene;
-	{	Parser::Data	levelData;
-
-		if (!Parser::level(levelData, inputFile)) return (false);
-		addToTextureList({levelData.textures.north,
-				levelData.textures.east,
-				levelData.textures.south,
-				levelData.textures.west});
-		_scene = new Scene(std::move(levelData));
-	}
-	// next steps should be elsewhere
-	// if  (!_renderer.init(window)) return (false);
-	// if (!_hud.init()) return false;
-	return (true);
+	_scene->update();
+	// _hud.updatePlay();
+	_renderer->update();
 }
 
 void	Game::addToTextureList(std::initializer_list<Window::Texture> textures)
@@ -112,18 +94,3 @@ void	Game::clearTextureList()
 	for (Window::Texture texture : _allocatedTextures)
 		Window::deleteTexture(texture);
 }
-
-// Window const	&Game::getWindow() const
-// {
-// 	return (_window);
-// }
-
-// Scene const	&Game::getScene() const
-// {
-// 	return (*_scene);
-// }
-
-// Game::View	Game::getView() const
-// {
-// 	return (_view);
-// }

@@ -32,13 +32,13 @@ bool	Window::init()
 	_cursor = mlx_create_std_cursor(MLX_CURSOR_ARROW);
 	if (_cursor == nullptr) return (set_error(cub::err::MlxFail));
 	mlx_set_cursor(_mlx, _cursor);
-	mlx_key_hook(_mlx, keyHookCallback, this);
-	mlx_loop_hook(_mlx, loopHookCallback, this);
 	return (true);
 }
 
 void	Window::loop()
 {
+	mlx_key_hook(_mlx, keyHookCallback, this);
+	mlx_loop_hook(_mlx, loopHookCallback, this);
 	mlx_loop(_mlx);
 }
 
@@ -85,6 +85,11 @@ Window::Image	Window::newImage() const
 	return (image);
 }
 
+bool	Window::isKeyDown(Key key) const
+{
+	return (mlx_is_key_down(_mlx, key));
+}
+
 void	Window::addKeyHook(KeyHook function)
 {
 	_keyHooks.push_back(function);
@@ -119,7 +124,7 @@ void	Window::loopHookCallback(void *self)
 	((Window *)self)->callLoopHooks();
 }
 
-const Window::Settings	&Window::getSettings() const
-{
-	return (_settings);
-}
+// const Window::Settings	&Window::getSettings() const
+// {
+// 	return (_settings);
+// }

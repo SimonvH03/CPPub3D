@@ -18,7 +18,7 @@ INCLUDE		=	$(addprefix -I , $(INCLUDE_DIRS))
 CLASSES_DIR	=	classes
 CLASSES		=	Camera.cpp \
 				Cell.cpp \
-				Engine.cpp \
+				Physicer.cpp \
 				Error.cpp \
 				Game.cpp \
 				GameHUD.cpp \
@@ -26,6 +26,7 @@ CLASSES		=	Camera.cpp \
 				Hud.cpp \
 				MenuHUD.cpp \
 				Parser.cpp \
+				PressedKeys.cpp \
 				Player.cpp \
 				Renderer.cpp \
 				Scene.cpp \

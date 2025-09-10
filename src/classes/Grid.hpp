@@ -19,9 +19,9 @@ class Grid
 		Grid &operator=(Grid &&other) noexcept;
 		~Grid();
 
-		typedef	int		(*iterateFunc)(Cell, size_t, size_t, void *);
+		using IterateFunc	= int	(Cell, size_t, size_t, void *);
 
-		int			iterate(iterateFunc function, void *param);
+		int			iterate(IterateFunc function, void *param);
 		Cell const	&getCell(size_t y, size_t x) const;
 		void		setCell(size_t y, size_t x, char token);
 

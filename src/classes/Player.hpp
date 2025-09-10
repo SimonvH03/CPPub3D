@@ -14,7 +14,10 @@ class Player
 		Player &operator=(Player &&original);
 		~Player();
 
-		Camera const	&getCamera();
+		void	yawCamera(short sign);
+		void	pitchCamera(short sign);
+
+		Camera const	&getCamera() const;
 
 	private:
 		Camera	_camera;

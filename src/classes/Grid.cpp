@@ -77,7 +77,7 @@ Cell	&Grid::cell(size_t y, size_t x)
 	return (_data[y * _width + x]);
 }
 
-int	Grid::iterate(iterateFunc function, void *param)
+int	Grid::iterate(IterateFunc function, void *param)
 {
 	size_t	y;
 	size_t	x;

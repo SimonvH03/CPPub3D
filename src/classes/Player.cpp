@@ -31,7 +31,17 @@ Player::~Player()
 	std::cout << "Player Destructor\n";
 }
 
-Camera const	&Player::getCamera()
+void	Player::yawCamera(short sign)
+{
+	_camera.yaw(sign);
+}
+
+void	Player::pitchCamera(short sign)
+{
+	_camera.pitch(sign);
+}
+
+Camera const	&Player::getCamera() const
 {
 	return (_camera);
 }
