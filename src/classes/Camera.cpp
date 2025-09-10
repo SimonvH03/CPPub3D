@@ -95,10 +95,13 @@ Camera::~Camera()
 	std::cout << "Camera Destructor\n";
 }
 
-// void	Camera::pan()
-// void	Camera::move()
+void	Camera::pan(Vec2 radian)
+{
+	yaw(radian.x);
+	pitch(radian.y);
+}
 
-void	Camera::yaw(float step)// replace float rm[2][2] with Vec2 rm[2], use Vec2 * Vec2 operator
+void	Camera::yaw(float step)
 {
 	if (step == 0)	return;
 	Vec2 const	oldDir = _dir;
@@ -110,11 +113,18 @@ void	Camera::yaw(float step)// replace float rm[2][2] with Vec2 rm[2], use Vec2 
 	_plane = _dir.left();
 }
 
-void	Camera::pitch(float step)
+void	Camera::pitch(float step)// camera shouldn't know window_height
 {
 	if (step == 0)	return;
 	_height_offset -= 0.01 * config::WindowHeight * step;
-	std::clamp(_height_offset, (int32_t)0, config::WindowHeight); // camera shouldn't know window_height
+	std::clamp(_height_offset, (int32_t)0, config::WindowHeight);
+}
+
+void	Camera::move(Vec2 step)
+{
+	step.x *= step.dot(_dir);
+	step.normalise();
+	_pos += _dir * step;
 }
 
 // Vec2	Camera::getPos() const

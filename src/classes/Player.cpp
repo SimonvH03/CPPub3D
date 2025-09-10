@@ -36,8 +36,7 @@ void	Player::update()
 
 void	Player::execInputs()
 {
-	_camera.yaw(_inputs.look.lateral);
-	_camera.pitch(_inputs.look.longitudinal);
+	_camera.pan(_inputs.pan);
 	_camera.move(_inputs.move);
 }
 

@@ -5,7 +5,6 @@
 # include "Physicer.hpp"
 
 # include "Camera.hpp"
-# include "Grid.hpp"
 
 class Player
 {

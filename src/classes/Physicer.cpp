@@ -11,45 +11,34 @@ Physicer::~Physicer()
 	std::cout << "Physicer Destructor\n";
 }
 
-Physicer::InputsPlay &Physicer::InputsPlay::operator*=(float factor)
-{
-	move *= factor;
-	look *= factor;
-	return (*this);
-}
-
-Physicer::InputsPlay::Plane &Physicer::InputsPlay::Plane::operator*=(float factor)
-{
-	lateral *= factor;
-	longitudinal *= factor;
-	return (*this);
-}
-
 void	Physicer::update()
 {
 	interpretPressedKeys();
-
 	// mouse_pan();
-	_inputsPlay *= std::clamp(_window.getFrameTime(), 0.0f, (0.5f/_movementSpeed));
+	// collisioncheck where??? Camera::move()->Scene.requestMove()? Physicer::collisioncheck()->getCamera(),getGrid()?
 }
 
 void	Physicer::interpretPressedKeys()
 {
 	Window::PressedKeys	const	&keys = _window.getPressedKeys();
+	float const	frameTimeScalar = std::clamp(_window.getFrameTime(), 0.0f, (0.5f/_movementSpeed));
+	_inputsPlay = InputsPlay();
 
-	if (keys.w) _inputsPlay.move.lateral += 1;
-	if (keys.a) _inputsPlay.move.lateral -= 1;
-	if (keys.s) _inputsPlay.move.longitudinal += 1;
-	if (keys.d) _inputsPlay.move.longitudinal -= 1;
-	_inputsPlay.move *= _movementSpeed;
+	if (keys.w)	_inputsPlay.move.y += 1;
+	if (keys.s)	_inputsPlay.move.y -= 1;
+	if (keys.a)	_inputsPlay.move.x += 1;
+	if (keys.d)	_inputsPlay.move.x -= 1;
+	// if (_inputsPlay.move)	_inputsPlay.move.normalise(); normalise happens in Camera?
+	_inputsPlay.move *= _movementSpeed * frameTimeScalar;
 
-	if (keys.left)	_inputsPlay.look.lateral += 1;
-	if (keys.right) _inputsPlay.look.lateral -= 1;
-	if (keys.up)	_inputsPlay.look.longitudinal += 1;
-	if (keys.down)	_inputsPlay.look.longitudinal -= 1;
-	_inputsPlay.look *= _rotationSpeed;
+	if (keys.up)	_inputsPlay.pan.y += 1;
+	if (keys.down)	_inputsPlay.pan.y -= 1;
+	if (keys.left)	_inputsPlay.pan.x += 1;
+	if (keys.right) _inputsPlay.pan.x -= 1;
+	// if (_inputsPlay.pan)	_inputsPlay.pan.normalise();
+	_inputsPlay.pan *= _rotationSpeed * frameTimeScalar;
 
-	// std::cout	<< "lat: " << _inputsPlay.look.lateral << "\tlong: " << _inputsPlay.look.longitudinal << "\n";
+	// std::cout	<< "lat: " << _inputsPlay.look.x << "\tlong: " << _inputsPlay.look.y << "\n";
 }
 
 // void

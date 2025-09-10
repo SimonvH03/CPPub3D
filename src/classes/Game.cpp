@@ -11,6 +11,7 @@ Game::~Game()
 	std::cout << "Game Destructor\n";
 	delete _renderer;
 	delete _scene;
+	delete _physicer;
 	clearTextureList();
 }
 

@@ -4,6 +4,7 @@
 # include <algorithm>
 
 # include "MLX42.h"
+# include "Vec2.hpp"
 # include "Config.hpp"
 # include "Window.hpp"
 
@@ -15,21 +16,8 @@ class Physicer
 
 		struct	InputsPlay
 		{
-			struct Plane
-			{
-				float	lateral = 0;
-				float	longitudinal = 0;
-				Plane	&operator*=(float const factor);
-			};
-			struct Move : Plane
-			{
-				static constexpr float	max = 0.5;
-			}	move;
-			struct Look : Plane
-			{
-				static constexpr float	max = 0.2;
-			}	look;
-			InputsPlay	&operator*=(float const factor);
+			Vec2	pan;
+			Vec2	move;
 		};
 
 		void	update();
