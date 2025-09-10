@@ -11,21 +11,26 @@ Physicer::~Physicer()
 	std::cout << "Physicer Destructor\n";
 }
 
-Physicer::InputsPlay &Physicer::InputsPlay::operator*(float factor)
+Physicer::InputsPlay &Physicer::InputsPlay::operator*=(float factor)
 {
-	move.lateral *= factor;
-	move.longitudinal *= factor;
+	move *= factor;
+	look *= factor;
+	return (*this);
+}
 
-	look.lateral *= factor;
-	look.longitudinal *= factor;
+Physicer::InputsPlay::Plane &Physicer::InputsPlay::Plane::operator*=(float factor)
+{
+	lateral *= factor;
+	longitudinal *= factor;
 	return (*this);
 }
 
 void	Physicer::update()
 {
 	interpretPressedKeys();
+
 	// mouse_pan();
-	_inputsPlay * _window.getFrameTime();
+	_inputsPlay *= std::clamp(_window.getFrameTime(), 0.0f, (0.5f/_movementSpeed));
 }
 
 void	Physicer::interpretPressedKeys()
@@ -36,13 +41,15 @@ void	Physicer::interpretPressedKeys()
 	if (keys.a) _inputsPlay.move.lateral -= 1;
 	if (keys.s) _inputsPlay.move.longitudinal += 1;
 	if (keys.d) _inputsPlay.move.longitudinal -= 1;
+	_inputsPlay.move *= _movementSpeed;
 
 	if (keys.left)	_inputsPlay.look.lateral += 1;
 	if (keys.right) _inputsPlay.look.lateral -= 1;
 	if (keys.up)	_inputsPlay.look.longitudinal += 1;
 	if (keys.down)	_inputsPlay.look.longitudinal -= 1;
+	_inputsPlay.look *= _rotationSpeed;
 
-	std::cout	<< "lat: " << _inputsPlay.look.lateral << "\tlong: " << _inputsPlay.look.longitudinal << "\n";
+	// std::cout	<< "lat: " << _inputsPlay.look.lateral << "\tlong: " << _inputsPlay.look.longitudinal << "\n";
 }
 
 // void

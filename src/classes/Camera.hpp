@@ -19,19 +19,19 @@ class Camera
 		Camera &operator=(Camera &&original) noexcept;
 		~Camera();
 
+		void	yaw(float step);
+		void	pitch(float step);
+
+		void	pan(Vec2 radian);
+		void	move(Vec2 step);
+
 	public:
 		Vec2	_pos;
 		Vec2	_dir;
 		Vec2	_plane;
 		int32_t	_height_offset = 0;
 
-		float	_cursor_rot_speed = 0;
-		float	_movement_speed = 0;
-		float	_movement_matrix[3][3];
-		float	_rotation_cosin[2] = {cosf(1), sinf(1)}; // temporary testing default initialization
-
-		void	yaw(float sign);
-		void	pitch(float sign);
+		static constexpr float	_movement_matrix[3][3] = {{-0.7,0,0.7},{-1,0,1},{-0.7,0,0.7}}; // find out a way to use 1/sqrt(2) instead of 0.7
 
 		// Vec2	getPos() const;
 		// Vec2	getDir() const;

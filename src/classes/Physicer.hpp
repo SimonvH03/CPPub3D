@@ -1,6 +1,7 @@
 #ifndef PHYSICER_HPP
 # define PHYSICER_HPP
 # include <iostream>
+# include <algorithm>
 
 # include "MLX42.h"
 # include "Config.hpp"
@@ -14,17 +15,21 @@ class Physicer
 
 		struct	InputsPlay
 		{
-			struct Move
+			struct Plane
 			{
-				float	lateral;
-				float	longitudinal;
+				float	lateral = 0;
+				float	longitudinal = 0;
+				Plane	&operator*=(float const factor);
+			};
+			struct Move : Plane
+			{
+				static constexpr float	max = 0.5;
 			}	move;
-			struct Look
+			struct Look : Plane
 			{
-				float	lateral;
-				float	longitudinal;
+				static constexpr float	max = 0.2;
 			}	look;
-			InputsPlay &operator*(float const factor);
+			InputsPlay	&operator*=(float const factor);
 		};
 
 		void	update();
@@ -35,6 +40,10 @@ class Physicer
 		Window const	&_window;
 
 		InputsPlay		_inputsPlay;
+
+		// float	_mouseSensitivity = config::MouseSensitivity;
+		float	_movementSpeed = config::MovementSpeed;
+		float	_rotationSpeed = config::RotationSpeed;
 
 		void	interpretPressedKeys();
 

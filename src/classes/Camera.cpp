@@ -41,9 +41,7 @@ Camera::Camera(Camera const &original)
 	:	_pos(original._pos),
 		_dir(original._dir),
 		_plane(original._plane),
-		_height_offset(original._height_offset),
-		_cursor_rot_speed(original._cursor_rot_speed),
-		_movement_speed(original._movement_speed)
+		_height_offset(original._height_offset)
 {
 	std::cout << "Camera Copy Constructor\n";
 }
@@ -52,17 +50,13 @@ Camera::Camera(Camera &&original) noexcept
 	:	_pos(original._pos),
 		_dir(original._dir),
 		_plane(original._plane),
-		_height_offset(original._height_offset),
-		_cursor_rot_speed(original._cursor_rot_speed),
-		_movement_speed(original._movement_speed)
+		_height_offset(original._height_offset)
 {
 	std::cout << "Camera Move Constructor\n";
 	original._pos = Vec2(0,0);
 	original._dir = Vec2(0,0);
 	original._plane = Vec2(0,0);
 	original._height_offset = 0;
-	original._cursor_rot_speed = 0;
-	original._movement_speed = 0;
 }
 
 Camera &Camera::operator=(Camera const &original)
@@ -74,8 +68,6 @@ Camera &Camera::operator=(Camera const &original)
 		_dir = original._dir;
 		_plane = original._plane;
 		_height_offset = original._height_offset;
-		_cursor_rot_speed = original._cursor_rot_speed;
-		_movement_speed = original._movement_speed;
 	}
 	return (*this);
 }
@@ -89,15 +81,11 @@ Camera &Camera::operator=(Camera &&original) noexcept
 		_dir = original._dir;
 		_plane = original._plane;
 		_height_offset = original._height_offset;
-		_cursor_rot_speed = original._cursor_rot_speed;
-		_movement_speed = original._movement_speed;
 
 		original._pos = Vec2(0,0);
 		original._dir = Vec2(0,0);
 		original._plane = Vec2(0,0);
 		original._height_offset = 0;
-		original._cursor_rot_speed = 0;
-		original._movement_speed = 0;
 	}
 	return (*this);
 }
@@ -107,24 +95,26 @@ Camera::~Camera()
 	std::cout << "Camera Destructor\n";
 }
 
-void	Camera::yaw(float step)// built for -1/1, not variable step size, needs redo
-{
-	Vec2	oldDir = _dir;
-	// const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * sign},
-	// 					{-_rotation_cosin[1] * sign, _rotation_cosin[0]}};
-	const float	rm[2][2] = {{_rotation_cosin[0], _rotation_cosin[1] * step},
-							{-_rotation_cosin[1] * step, _rotation_cosin[0]}};// bs line
+// void	Camera::pan()
+// void	Camera::move()
 
-	_dir.x = oldDir.x * rm[0][0] + oldDir.y * rm[0][1];
-	_dir.y = oldDir.x * rm[1][0] + oldDir.y * rm[1][1];
+void	Camera::yaw(float step)// replace float rm[2][2] with Vec2 rm[2], use Vec2 * Vec2 operator
+{
+	if (step == 0)	return;
+	Vec2 const	oldDir = _dir;
+	Vec2 const	rm[2] = {Vec2(cosf(step), sinf(step)), Vec2(-sinf(step), cosf(step))};
+
+	_dir.x = oldDir.dot(rm[0]);
+	_dir.y = oldDir.dot(rm[1]);
 	_dir.normalise();
 	_plane = _dir.left();
 }
 
 void	Camera::pitch(float step)
 {
+	if (step == 0)	return;
 	_height_offset -= 0.01 * config::WindowHeight * step;
-	std::clamp(_height_offset, 0, config::WindowHeight); // camera shouldn't know window_height
+	std::clamp(_height_offset, (int32_t)0, config::WindowHeight); // camera shouldn't know window_height
 }
 
 // Vec2	Camera::getPos() const

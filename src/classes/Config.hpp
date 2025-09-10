@@ -5,13 +5,17 @@
 
 namespace config
 {
-	inline static constexpr	const char			*WindowTitle = "title";
-	inline static constexpr int32_t				MonitorId = 0;
-	inline static constexpr	bool				Fullscreen = false;
-	inline static constexpr	int32_t				WindowWidth = 2560;
-	inline static constexpr	int32_t				WindowHeight = 720;
+	inline static constexpr	const char		*WindowTitle = "title";
+	inline static constexpr int32_t			MonitorId = 0;
+	inline static constexpr	bool			Fullscreen = false;
+	inline static constexpr	int32_t			WindowWidth = 2560;
+	inline static constexpr	int32_t			WindowHeight = 720;
 
-	inline static constexpr const std::string	AllowedCharacters = "01NESW ";
+	inline static constexpr std::string		AllowedCharacters = "01NESW ";
+
+	inline static constexpr	uint32_t		MovementSpeed = 4;
+	inline static constexpr	uint32_t		RotationSpeed = 2;
+	inline static constexpr	uint32_t		MouseSensitivity = 50;
 }
 
 #endif

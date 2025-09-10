@@ -36,16 +36,9 @@ void	Player::update()
 
 void	Player::execInputs()
 {
-	if (_inputs.look.lateral)
-	{
-		std::cout << "leftright\n";
-		_camera.yaw(_inputs.look.lateral);
-	}
-	if (_inputs.look.longitudinal)
-	{
-		std::cout << "updown\n";
-		_camera.pitch(_inputs.look.longitudinal);
-	}
+	_camera.yaw(_inputs.look.lateral);
+	_camera.pitch(_inputs.look.longitudinal);
+	_camera.move(_inputs.move);
 }
 
 Camera const	&Player::getCamera() const
