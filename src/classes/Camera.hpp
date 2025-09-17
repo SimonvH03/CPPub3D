@@ -25,11 +25,11 @@ class Camera
 		Vec2	_pos;
 		Vec2	_dir;
 		Vec2	_plane;
-		int32_t	_height_offset = 0;
+		float	_verticalOffset = config::WindowHeight / 2;
 
 	private:
-		void	yaw(float step);
-		void	pitch(float step);
+		void	yaw(float radian);
+		void	pitch(float radian);
 
 		// Vec2	getPos() const;
 		// Vec2	getDir() const;

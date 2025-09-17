@@ -24,18 +24,18 @@ void	Physicer::interpretPressedKeys()
 	float const	frameTimeScalar = std::clamp(_window.getFrameTime(), 0.0f, (0.5f/_movementSpeed));
 	_inputsPlay = InputsPlay();
 
-	if (keys.w)	_inputsPlay.move.y += 1;
-	if (keys.s)	_inputsPlay.move.y -= 1;
-	if (keys.a)	_inputsPlay.move.x += 1;
-	if (keys.d)	_inputsPlay.move.x -= 1;
-	// if (_inputsPlay.move)	_inputsPlay.move.normalise(); normalise happens in Camera?
+	if (keys.w)	_inputsPlay.move.x += 1;
+	if (keys.s)	_inputsPlay.move.x -= 1;
+	if (keys.a)	_inputsPlay.move.y -= 1;
+	if (keys.d)	_inputsPlay.move.y += 1;
+	if (_inputsPlay.move)	_inputsPlay.move.normalise();
 	_inputsPlay.move *= _movementSpeed * frameTimeScalar;
 
 	if (keys.up)	_inputsPlay.pan.y += 1;
 	if (keys.down)	_inputsPlay.pan.y -= 1;
 	if (keys.left)	_inputsPlay.pan.x += 1;
 	if (keys.right) _inputsPlay.pan.x -= 1;
-	// if (_inputsPlay.pan)	_inputsPlay.pan.normalise();
+	if (_inputsPlay.pan)	_inputsPlay.pan.normalise();
 	_inputsPlay.pan *= _rotationSpeed * frameTimeScalar;
 
 	// std::cout	<< "lat: " << _inputsPlay.look.x << "\tlong: " << _inputsPlay.look.y << "\n";

@@ -67,7 +67,7 @@ void	Grid::setCell(size_t y, size_t x, char value)
 	cell(y, x) = value;
 }
 
-Cell const &Grid::getCell(size_t y, size_t x) const
+Cell const	&Grid::getCell(size_t y, size_t x) const
 {
 	return (_data[y * _width + x]);
 }

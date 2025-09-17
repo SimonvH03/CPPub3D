@@ -21,23 +21,24 @@ class Renderer
 		Window::Image	_image;
 		// Window::Image	_background;
 		Scene const		&_scene;
-		float			_aspectRatio;
+		float			_aspectRatio = config::WindowWidth/ config::WindowHeight;
 
 		void	wipe();
 		void	initRay();
 		void	castRay();
+		void	drawSimpleColumn(uint32_t x);
 		// void	render_texture_column();
 
 	
-		struct	s_ray
+		struct	Ray
 		{
 			struct	coordinate
 			{
-				uint32_t	x,y;
+				size_t	x,y;
 			}			pos;
 			struct	quadrant
 			{
-				short		x,y;
+				short	x,y;
 			}			sign;
 			float		camera_x;
 			float		distance;

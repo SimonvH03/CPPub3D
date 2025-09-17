@@ -52,6 +52,11 @@ Cell::~Cell()
 	// std::cout << "Cell Destructor";
 }
 
+Cell::operator bool() const
+{
+	return (isSolid());
+}
+
 char	Cell::getType() const
 {
 	return (_type);

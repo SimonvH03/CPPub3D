@@ -22,57 +22,80 @@ void	Renderer::initRay()
 {
 	Camera const &camera = _scene.getCamera();
 
-	_ray.pos.x = (int)camera._pos.x;
-	_ray.pos.y = (int)camera._pos.y;
-	_ray.dir.x = camera._dir.x + camera._plane.x * _aspectRatio * _ray.camera_x;
-	_ray.dir.y = camera._dir.y + camera._plane.y * _aspectRatio * _ray.camera_x;
-	_ray.step.x = std::abs(1 / _ray.dir.x);
-	if (_ray.step.x == INFINITY)
-		_ray.step.x = (float)UINT32_MAX;
-	_ray.step.y = std::abs(1 / _ray.dir.y);
-	if (_ray.step.y == INFINITY)
-		_ray.step.y = (float)UINT32_MAX;
-	_ray.sign.x = (_ray.dir.x == 0) ? 0 : (_ray.dir.x > 0) ? 1 : -1;
-	_ray.sign.y = (_ray.dir.y == 0) ? 0 : (_ray.dir.y > 0) ? 1 : -1;
-	if (_ray.sign.x > 0)
-		_ray.total.x = ((_ray.pos.x + 1 - camera._pos.x) * _ray.step.x);
-	else
-		_ray.total.x = (camera._pos.x - _ray.pos.x) * _ray.step.x;
-	if (_ray.sign.y > 0)
-		_ray.total.y = ((_ray.pos.y + 1 - camera._pos.y) * _ray.step.y);
-	else
-		_ray.total.y = (camera._pos.y - _ray.pos.y) * _ray.step.y;
-	_ray.start.x = camera._pos.x;
-	_ray.start.y = camera._pos.y;
+	_ray.pos = {(size_t)camera._pos.x, (size_t)camera._pos.y};
+	_ray.dir = camera._dir + camera._plane * _aspectRatio * _ray.camera_x;
+	_ray.step.x = (_ray.dir.x == 0.0f)
+		? std::numeric_limits<float>::max()
+		: std::abs(1 / _ray.dir.x);
+	_ray.step.y = (_ray.dir.y == 0.0f)
+		? std::numeric_limits<float>::max()
+		: std::abs(1 / _ray.dir.y);
+	_ray.sign.x = (_ray.dir.x == 0)
+		? 0 : (_ray.dir.x > 0) ? 1 : -1;
+	_ray.sign.y = (_ray.dir.y == 0)
+		? 0 : (_ray.dir.y > 0) ? 1 : -1;
+	_ray.total.x = (_ray.sign.x > 0)
+		? (_ray.pos.x + 1 - camera._pos.x) * _ray.step.x
+		: (camera._pos.x - _ray.pos.x) * _ray.step.x;
+	_ray.total.y = (_ray.sign.y > 0)
+		? (_ray.pos.y + 1 - camera._pos.y) * _ray.step.y
+		: (camera._pos.y - _ray.pos.y) * _ray.step.y;
+	_ray.start = camera._pos;
 	_ray.distance = 0;
 }
 
 void	Renderer::castRay()
 {
 	Grid const	&grid = _scene.getGrid();
+
 	while (true)
 	{
 		if (_ray.total.y < _ray.total.x)
 		{
 			_ray.total.y += _ray.step.y;
 			_ray.pos.y += _ray.sign.y;
-			_ray.hitAxis = s_ray::e_hitAxis::horizontal;
+			_ray.hitAxis = Ray::e_hitAxis::horizontal;
 		}
 		else
 		{
 			_ray.total.x += _ray.step.x;
 			_ray.pos.x += _ray.sign.x;
-			_ray.hitAxis = s_ray::e_hitAxis::vertical;
+			_ray.hitAxis = Ray::e_hitAxis::vertical;
 		}
+		if (_ray.pos.y > grid.getHeight() || _ray.pos.x > grid.getWidth()) // temporary measure
+			break ;
 		if (grid.getCell(_ray.pos.y, _ray.pos.x).isSolid())
 			break ;
 		// if (hit_position(_ray, grid, _ray.pos.y, _ray.pos.x) == true)
 		// 	break ;
 	}
-	if (_ray.hitAxis == s_ray::e_hitAxis::horizontal)
+	if (_ray.hitAxis == Ray::e_hitAxis::horizontal)
 		_ray.distance = _ray.total.y - _ray.step.y;
 	else
 		_ray.distance = _ray.total.x - _ray.step.x;
+}
+
+void	Renderer::drawSimpleColumn(uint32_t x)
+{
+	uint32_t	halfScreen = _image->height / 2;
+	uint32_t	halfColumn = halfScreen / _ray.distance;
+
+	halfScreen	= _scene.getCamera()._verticalOffset;
+	int32_t		start = halfScreen - halfColumn;
+	uint32_t	end = halfScreen + halfColumn;
+	uint32_t	screen_y = std::clamp(start, (int32_t)0, (int32_t)_image->height);
+	// if (_ray.distance < 1)	std::cout	<< "distance: " << _ray.distance << "\t"
+	// 									<< "halfColumn: " << halfColumn << "\t"
+	// 									<< "start: " << start << "\t"
+	// 									<< "end: " << end << "\t"
+	// 									<< "screenHeight: " << _image->height << "\t"
+	// 									<< "screen_y: " << screen_y << "\n";
+	while (screen_y < std::clamp(end, (uint32_t)0, _image->height))
+	{
+		((uint32_t *)_image->pixels)[x + screen_y * _image->width]
+			= 0xFFFF00FF;
+		screen_y++;
+	}
 }
 
 void	Renderer::update()
@@ -83,22 +106,7 @@ void	Renderer::update()
 		_ray.camera_x = x / (float)(_image->width - 1) - 0.5;
 		initRay();
 		castRay();
-		uint32_t	halfHeight = _image->height / _ray.distance / 2;
-		int32_t		start = _image->height / 2 - halfHeight;
-		int32_t		end = _image->height / 2 + halfHeight;
-		uint32_t	screen_y = (uint32_t)start;
-		// std::cout	<< "distance: " << _ray.distance << "\t"
-		// 			<< "halfHeight: " << halfHeight << "\t"
-		// 			<< "start: " << start << "\t"
-		// 			<< "start: " << start << "\t"
-		// 			<< "end: " << end << "\t"
-		// 			<< "screen_y: " << screen_y << "\n";
-		while (screen_y < (uint32_t)end)
-		{
-			((uint32_t *)_image->pixels)[x + screen_y * _image->width]
-				= 0xFFFF00FF;
-			screen_y++;
-		}
+		drawSimpleColumn(x);
 		// draw_texture_collumn()
 	}
 }

@@ -41,7 +41,7 @@ Camera::Camera(Camera const &original)
 	:	_pos(original._pos),
 		_dir(original._dir),
 		_plane(original._plane),
-		_height_offset(original._height_offset)
+		_verticalOffset(original._verticalOffset)
 {
 	std::cout << "Camera Copy Constructor\n";
 }
@@ -50,13 +50,13 @@ Camera::Camera(Camera &&original) noexcept
 	:	_pos(original._pos),
 		_dir(original._dir),
 		_plane(original._plane),
-		_height_offset(original._height_offset)
+		_verticalOffset(original._verticalOffset)
 {
 	std::cout << "Camera Move Constructor\n";
 	original._pos = Vec2(0,0);
 	original._dir = Vec2(0,0);
 	original._plane = Vec2(0,0);
-	original._height_offset = 0;
+	original._verticalOffset = 0;
 }
 
 Camera &Camera::operator=(Camera const &original)
@@ -67,7 +67,7 @@ Camera &Camera::operator=(Camera const &original)
 		_pos = original._pos;
 		_dir = original._dir;
 		_plane = original._plane;
-		_height_offset = original._height_offset;
+		_verticalOffset = original._verticalOffset;
 	}
 	return (*this);
 }
@@ -80,12 +80,12 @@ Camera &Camera::operator=(Camera &&original) noexcept
 		_pos = original._pos;
 		_dir = original._dir;
 		_plane = original._plane;
-		_height_offset = original._height_offset;
+		_verticalOffset = original._verticalOffset;
 
 		original._pos = Vec2(0,0);
 		original._dir = Vec2(0,0);
 		original._plane = Vec2(0,0);
-		original._height_offset = 0;
+		original._verticalOffset = 0;
 	}
 	return (*this);
 }
@@ -101,30 +101,31 @@ void	Camera::pan(Vec2 radian)
 	pitch(radian.y);
 }
 
-void	Camera::yaw(float step)
+void	Camera::yaw(float radian)
 {
-	if (step == 0)	return;
-	Vec2 const	oldDir = _dir;
-	Vec2 const	rm[2] = {Vec2(cosf(step), sinf(step)), Vec2(-sinf(step), cosf(step))};
+	if (!radian)	return;
 
-	_dir.x = oldDir.dot(rm[0]);
-	_dir.y = oldDir.dot(rm[1]);
+	_dir.rotate(radian);
+
 	_dir.normalise();
 	_plane = _dir.left();
+	// std::cout << atan2(_dir.y, _dir.x) * 180 / 3.14159 <<"\n";
 }
 
-void	Camera::pitch(float step)// camera shouldn't know window_height
+void	Camera::pitch(float radian)// camera shouldn't know window_height
 {
-	if (step == 0)	return;
-	_height_offset -= 0.01 * config::WindowHeight * step;
-	std::clamp(_height_offset, (int32_t)0, config::WindowHeight);
+	if (!radian)	return;
+
+	_verticalOffset += radian * static_cast<float>(config::WindowHeight);
+	_verticalOffset = std::clamp(_verticalOffset, 0.0f, static_cast<float>(config::WindowHeight));
+	std::cout << _verticalOffset << "\n";
 }
 
 void	Camera::move(Vec2 step)
 {
-	step.x *= step.dot(_dir);
-	step.normalise();
-	_pos += _dir * step;
+	if (!step)	return;
+
+	_pos += step;
 }
 
 // Vec2	Camera::getPos() const

@@ -17,6 +17,8 @@ class Cell
 		Cell &operator=(char token);
 		~Cell();
 
+	explicit	operator bool() const;
+
 		char	getType() const;
 		bool	isSolid() const;
 		int8_t	getID() const;

@@ -32,6 +32,8 @@ class Scene
 		Grid		_grid;
 		Player		_player;
 
+		Physicer::InputsPlay const	&_inputs;
+
 };
 
 #endif

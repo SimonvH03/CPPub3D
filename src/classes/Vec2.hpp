@@ -2,6 +2,7 @@
 # define VEC2_HPP
 
 # include <cmath>
+# include <iostream>
 
 class	Vec2
 {
@@ -11,33 +12,39 @@ class	Vec2
 
 		Vec2();
 		Vec2(float _x, float _y);
-		Vec2(const Vec2 &original);
+		Vec2(Vec2 const &original);
 		~Vec2();
 
-		Vec2	&operator=(const Vec2 &original);
-		Vec2	&operator+=(const Vec2 &other);
-		Vec2	&operator-=(const Vec2 &other);
+		Vec2	&operator=(Vec2 const &original);
+		Vec2	&operator+=(Vec2 const &other);
+		Vec2	&operator-=(Vec2 const &other);
 		Vec2	&operator*=(float scalar);
 		Vec2	&operator/=(float scalar);
 
-		Vec2	operator+(const Vec2 &other) const;
-		Vec2	operator-(const Vec2 &other) const;
+		Vec2	operator+(Vec2 const &other) const;
+		Vec2	operator-(Vec2 const &other) const;
 		Vec2	operator*(float scalar) const;
 		Vec2	operator/(float scalar) const;
 		Vec2	operator-() const;
 
-		bool	operator==(const Vec2 &other) const;
-		bool	operator!=(const Vec2 &other) const;
+		bool	operator==(Vec2 const &other) const;
+		bool	operator!=(Vec2 const &other) const;
 	explicit	operator bool() const;
 
 		Vec2	right() const;
 		Vec2	left() const;
-		float	dot(const Vec2 &other) const;
 		float	length() const;
-		Vec2	normalised() const;
+		float	dot(Vec2 const &other) const;
 
+		Vec2	normalised() const;
 		Vec2	&normalise();
+		Vec2	changedBasis(Vec2 const &basis) const;
+		Vec2	&changeBasis(Vec2 const &basis);
+		Vec2	rotated(float radian) const;
+		Vec2	&rotate(float radian);
 
 };
+
+std::ostream &operator<<(std::ostream &os, Vec2 const &vec2);
 
 #endif
